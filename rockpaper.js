@@ -1,4 +1,4 @@
-function getComputerChoice() {
+function getbotChoice() {
     choice = Math.random();
     if(choice < 0.3333){
         return "rock"
@@ -11,65 +11,95 @@ function getComputerChoice() {
     }
 }
 
-function getHumanChoice(){
-    choice = prompt("Enter your choice:")
-    return choice
-}
+var humanpoints = 0
+var botpoints = 0
+var gameOver = 0
 
-function playRound() {
-    var humanchoice = getHumanChoice()
-    var computerchoice = getComputerChoice()
+function playRound(choice) {
+    var humanchoice = choice
+    var botchoice = getbotChoice()
     var winner
-    if(humanchoice === computerchoice){
-        winner = 'none'
-    }
-    else if(humanchoice == 'scissors' && computerchoice == 'rock'){;
-        winner = 'computer'
-    }
-    else if(humanchoice == 'rock' && computerchoice == 'paper'){
-        winner = 'computer'
-    }
-    else if(humanchoice == 'paper' && computerchoice == 'scissors'){
-        winner = 'computer'
-    }
-    else if(humanchoice == 'rock' && computerchoice == 'scissors'){
-        winner = 'human'
-    }
-    else if(humanchoice == 'paper' && computerchoice == 'rock'){
-        winner = 'human'
-    }
-    else if(humanchoice == 'scissors' && computerchoice == 'paper'){
-        winner = 'human'
+
+    if(gameOver == 1){
+        console.log('hi')
     }
     else{
-        winner = 'none'
+        if(humanchoice === botchoice){
+            winner = 'none'
+        }
+        else if(humanchoice == 'scissors' && botchoice == 'rock'){;
+            winner = 'bot'
+        }
+        else if(humanchoice == 'rock' && botchoice == 'paper'){
+            winner = 'bot'
+        }
+        else if(humanchoice == 'paper' && botchoice == 'scissors'){
+            winner = 'bot'
+        }
+        else if(humanchoice == 'rock' && botchoice == 'scissors'){
+            winner = 'human'
+        }
+        else if(humanchoice == 'paper' && botchoice == 'rock'){
+            winner = 'human'
+        }
+        else if(humanchoice == 'scissors' && botchoice == 'paper'){
+            winner = 'human'
+        }
+        else{
+            winner = 'none'
+        }
+        console.log(`${winner} wins the round`)
     }
-    console.log(`${winner} wins the round`)
-    return winner
+    if(winner == 'bot'){
+        botpoints = botpoints + 1
+        botscore.textContent = 'bot score: ' + botpoints
+    }
+    else if(winner == 'human'){
+        humanpoints += 1
+        humanscore.textContent = 'human score: ' + humanpoints
+    }
+    
+    if(humanpoints >= 5){
+        gameOver = 1
+    }
+    if(botpoints >= 5){
+        gameOver = 1
+    }
   }
 
-function playGame(){
-    let humanScore = 0
-    let computerScore = 0
+const rockButton = document.createElement('button')
+const paperButton = document.createElement('button')
+const scissorsButton = document.createElement('button')
 
-    while(humanScore < 3 && computerScore < 3){
-        winner = playRound()
-        if(winner == "human"){
-            humanScore++
-            console.log(`Human score: ${humanScore}`);
-        }
-        else if(winner =="computer"){
-            computerScore++
-            console.log(`Computer score: ${computerScore}`);
-        }
-        else if(winner =="none"){
-            continue
-        }
-    }
-        if (humanScore === 3) {
-            console.log("You win the game!");
-        } else if (computerScore === 3) {
-            console.log("Computer wins the game!");
-        }
-    return
+rockButton.addEventListener('click', ()=>playRound('rock'))
+rockButton.textContent = "rock"
+paperButton.addEventListener('click', ()=>playRound('paper'))
+paperButton.textContent = "paper"
+scissorsButton.addEventListener('click', ()=>playRound('scissors'))
+scissorsButton.textContent = 'scissors'
+
+const body = document.querySelector('body')
+
+body.appendChild(rockButton)
+body.appendChild(paperButton)
+body.appendChild(scissorsButton)
+
+const scoreboard = document.createElement('div')
+scoreboard.textContent = 'Scoreboard'
+body.appendChild(scoreboard)
+
+var humanscore = document.createElement('p')
+humanscore.textContent = 'Human score: ' + humanpoints
+scoreboard.appendChild(humanscore)
+
+var botscore = document.createElement('p')
+botscore.textContent = 'Bot score: ' + botpoints
+scoreboard.appendChild(botscore)
+
+function resetGame(){
+    gameOver = 0
+    botpoints = 0
+    botscore.textContent = 'Bot score: ' + botpoints
+    humanpoints = 0
+    humanscore.textContent = 'Human score: ' + humanpoints
 }
